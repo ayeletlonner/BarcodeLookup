@@ -9,8 +9,8 @@ public class BarcodeLookupClient {
 
     public BarcodeLookupClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.barcodelookup.com/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.barcodelookup.com")
+                .addConverterFactory(GsonConverterFactory.create()) // is this unecessary because Barcode Lookup returns JSON???
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         api = retrofit.create(BarcodeLookupAPI.class);
@@ -21,6 +21,8 @@ public class BarcodeLookupClient {
     }
 }
 
+//https://api.barcodelookup.com
+//https://jsonplaceholder.typicode.com
 //create retrofit api interface
 //create pojos - things that the interface will return to you
 //write a unit test or test in main where you instantiate retrofit, instantiate apis, make api calls, and make sure you get the data you want
