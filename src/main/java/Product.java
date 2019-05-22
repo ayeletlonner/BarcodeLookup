@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Product {
 
     private int barcode_number;
