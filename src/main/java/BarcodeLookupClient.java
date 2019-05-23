@@ -6,17 +6,31 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BarcodeLookupClient {
 
     private final BarcodeLookupAPI api;
+    private String productName;
+    private String barcode;
 
     public BarcodeLookupClient() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.barcodelookup.com")
-                .addConverterFactory(GsonConverterFactory.create()) // is this unecessary because Barcode Lookup returns JSON???
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         api = retrofit.create(BarcodeLookupAPI.class);
     }
 
-    public Observable<BarcodeLookupObject> getProducts() {
-        return api.getProducts();
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public Observable<BarcodeLookupObject> searchByProductName() {
+        return api.searchByProductName(productName);
+    }
+
+    public Observable<BarcodeLookupObject> searchByBarcode() {
+        return api.searchByBarcode(barcode);
     }
 }

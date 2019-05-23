@@ -1,9 +1,5 @@
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class BarcodeLookupFrame extends JFrame {
 
@@ -17,20 +13,9 @@ public class BarcodeLookupFrame extends JFrame {
 
         JPanel root = new JPanel();
         root.setLayout(new BorderLayout());
-        BarcodeLookupComponent component = new BarcodeLookupComponent();
-        root.add(component.getComponent(), BorderLayout.CENTER);
-
-
         BarcodeLookupClient client = new BarcodeLookupClient();
-        Disposable disposable = client.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(component::setProducts, Throwable::printStackTrace);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                disposable.dispose();
-            }
-        });
+        BarcodeLookupComponent component = new BarcodeLookupComponent(client);
+        root.add(component.getComponent(), BorderLayout.CENTER);
 
         setContentPane(root);
     }

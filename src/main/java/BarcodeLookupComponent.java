@@ -1,23 +1,31 @@
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class BarcodeLookupComponent {
+public class BarcodeLookupComponent  extends JFrame{
 
+    private BarcodeLookupClient client;
     private JPanel mainPanel = new JPanel(new BorderLayout(50, 50));
     private JTextArea textArea = new JTextArea();
     private JLabel imageLabel = new JLabel();
     private JPanel imagePanel = new JPanel(new BorderLayout());
     private JLabel imageNumber = new JLabel("No Image");
     private JPanel searchPanel = new JPanel(new FlowLayout());
+    private JTextField textField = new JTextField();
     private JList productList = new JList();
     private Products products;
     private String[] urls;
-    int productIndex;
-    int imageIndex;
+    private int productIndex;
+    private int imageIndex;
+    private Disposable disposable;
 
-    public BarcodeLookupComponent() {
+    public BarcodeLookupComponent(BarcodeLookupClient client) {
+        this.client = client;
         productIndex = 0;
         imageIndex = 0;
         setupMainPanel();
@@ -34,7 +42,7 @@ public class BarcodeLookupComponent {
         return mainPanel;
     }
 
-    private void setupMainPanel() {
+    public void setupMainPanel() {
         setupSearchPanel();
         setupScrollPane();
         setupImagePanel();
@@ -42,20 +50,11 @@ public class BarcodeLookupComponent {
     }
 
     private void setupSearchPanel() {
-        JTextField textField = new JTextField();
         textField.setColumns(10);
         JButton barcodeButton = new JButton("Search by barcode");
         JButton productNameButton = new JButton("Search by product name");
-        barcodeButton.addActionListener(e -> {
-
-            //setProductList();
-            //TODO fix this to be a barcode search - specify search
-        });
-        productNameButton.addActionListener(e -> {
-            //TODO fix this to be a product name search - specify search
-
-            //setProductList();
-        });
+        barcodeButton.addActionListener(e -> barcodeButtonClicked());
+        productNameButton.addActionListener(e -> productNameButtonClicked());
         searchPanel.add(textField);
         searchPanel.add(barcodeButton);
         searchPanel.add(productNameButton);
@@ -83,13 +82,13 @@ public class BarcodeLookupComponent {
         JButton nextImage = new JButton("Next Image");
         JButton previousImage = new JButton("Previous Image");
         previousImage.addActionListener(e -> {
-            if (imageIndex > 0 && products != null) {
+            if (imageIndex > 0 && urls != null) {
                 imageIndex--;
                 setImageLabel();
             }
         });
         nextImage.addActionListener(e -> {
-            if (products != null && imageIndex < urls.length - 1) {
+            if (urls != null && imageIndex < urls.length - 1) {
                 imageIndex++;
                 setImageLabel();
             }
@@ -108,11 +107,10 @@ public class BarcodeLookupComponent {
         JScrollPane scrollPane = new JScrollPane(productList);
         productList.addListSelectionListener(e -> {
             productIndex = productList.getSelectedIndex();
-            urls = products.get(productIndex).getImages();
+            setURLs();
             imageIndex = 0;
             setTextArea();
             setImageLabel();
-            //TODO set photo and info etc
         });
         mainPanel.add(scrollPane, BorderLayout.WEST);
     }
@@ -125,20 +123,74 @@ public class BarcodeLookupComponent {
             productNames[i] = products.get(i).getProductName();
         }
         productList.setListData(productNames);
-        urls = products.get(productIndex).getImages();
+        setURLs();
     }
 
     private void setImageLabel() {
+        imageLabel.setText(null);
         try {
-            imageLabel.setIcon(new ImageIcon(new URL(urls[imageIndex])));
-            imageNumber.setText((imageIndex + 1) + "/" + urls.length);
+            if (urls != null && urls.length > 0) {
+                imageLabel.setIcon(new ImageIcon(new URL(urls[imageIndex])));
+                imageNumber.setText((imageIndex + 1) + "/" + urls.length);
+            }
+            else {
+                setBlankImageLabel();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
+    private void setURLs() {
+        if (products != null && products.get(productIndex).getImages().length > 0) {
+            urls = products.get(productIndex).getImages();
+        }
+        else {
+            urls = null;
+        }
+    }
+
+    private void setBlankScreen() {
+        String[] noData = null;
+        productList.setListData(noData);
+        setBlankImageLabel();
+        textArea.setText("");
+    }
+
+    private void setBlankImageLabel() {
+        imageLabel.setIcon(null);
+        imageLabel.setText("No products found");
+        imageNumber.setText("No Image");
+    }
+
     private void setTextArea() {
         textArea.setText(products.get(productIndex).toString());
+    }
+
+    private void barcodeButtonClicked() {
+        client.setBarcode(textField.getText());
+        disposable = client.searchByBarcode()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(this::setProducts, Throwable::printStackTrace);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent event) {
+                disposable.dispose();
+            }
+        });
+    }
+
+    private void productNameButtonClicked() {
+        client.setProductName(textField.getText());
+        disposable = client.searchByProductName()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(this::setProducts, Throwable::printStackTrace);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent event) {
+                disposable.dispose();
+            }
+        });
     }
 }
 
