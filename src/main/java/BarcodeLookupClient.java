@@ -16,7 +16,7 @@ public class BarcodeLookupClient {
         api = retrofit.create(BarcodeLookupAPI.class);
     }
 
-    public Observable<Object> getProducts() {
+    public Observable<BarcodeLookupObject> getProducts() {
         return api.getProducts();
     }
 }
