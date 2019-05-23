@@ -24,12 +24,30 @@ public class Store {
 
     @Override
     public String toString() {
-        return "Store{" +
-                "store_name='" + store_name + '\'' +
-                ", store_price='" + store_price + '\'' +
-                ", product_url='" + product_url + '\'' +
-                ", currency_code='" + currency_code + '\'' +
-                ", currency_symbol='" + currency_symbol + '\'' +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder("<html>");
+
+        if (store_name != null && !store_name.isEmpty()) {
+            stringBuilder.append("Store Name: " + store_name);
+        }
+
+        if (store_price != null && !store_price.isEmpty()) {
+            stringBuilder.append("<br/>Store Price: " + store_price);
+        }
+
+        if (product_url != null && !product_url.isEmpty()) {
+            stringBuilder.append("<br/>Product URL: " + product_url);
+        }
+
+        if (currency_code != null && !currency_code.isEmpty()) {
+            stringBuilder.append("<br/>Currency Code: " + currency_code);
+        }
+
+        if (currency_symbol != null && !currency_symbol.isEmpty()) {
+            stringBuilder.append("<br/>Currency Symbol: " + currency_symbol);
+        }
+
+        stringBuilder.append("<html>");
+
+        return stringBuilder.toString();
     }
 }

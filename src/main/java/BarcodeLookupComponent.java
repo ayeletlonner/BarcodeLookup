@@ -6,10 +6,12 @@ import java.net.URL;
 public class BarcodeLookupComponent {
 
     private JPanel mainPanel = new JPanel(new BorderLayout());
+    private JLabel textLabel = new JLabel();
     private JLabel imageLabel = new JLabel();
     private JPanel imagePanel = new JPanel(new BorderLayout());
     private JLabel imageNumber = new JLabel("No Image");
     private JPanel searchPanel = new JPanel(new FlowLayout());
+    private JPanel infoPanel = new JPanel(new FlowLayout());
     private JList productList = new JList();
     private Products products;
     private String[] urls;
@@ -26,6 +28,7 @@ public class BarcodeLookupComponent {
         products =  barcodeLookupObject.getProducts();
         setProductList();
         setImageLabel();
+        setInfoLabel();
     }
 
     public JPanel getComponent() {
@@ -34,8 +37,10 @@ public class BarcodeLookupComponent {
 
     private void setupMainPanel() {
         setupSearchPanel();
+        setupTextLabel();
         setupImagePanel();
         setupScrollPane();
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
     }
 
     private void setupSearchPanel() {
@@ -59,6 +64,13 @@ public class BarcodeLookupComponent {
         mainPanel.add(searchPanel, BorderLayout.NORTH);
     }
 
+    private void setupTextLabel() {
+        textLabel.setMinimumSize(new Dimension(300, 700));
+        textLabel.setPreferredSize(new Dimension(300, 700));
+        textLabel.setMaximumSize(new Dimension(300, 700));
+        infoPanel.add(textLabel);
+    }
+
     private void setupImagePanel() {
         imagePanel.add(imageLabel, BorderLayout.CENTER);
         JPanel imageButtons = new JPanel(new FlowLayout());
@@ -80,7 +92,7 @@ public class BarcodeLookupComponent {
         imageButtons.add(imageNumber);
         imageButtons.add(nextImage);
         imagePanel.add(imageButtons, BorderLayout.SOUTH);
-        mainPanel.add(imagePanel, BorderLayout.WEST);
+        infoPanel.add(imagePanel);
     }
 
     private void setupScrollPane() {
@@ -92,9 +104,12 @@ public class BarcodeLookupComponent {
             productIndex = productList.getSelectedIndex();
             urls = products.get(productIndex).getImages();
             imageIndex = 0;
+            setInfoLabel();
             setImageLabel();
             //TODO set photo and info etc
         });
+        //infoPanel.add(scrollPane);
+        //infoPanel.revalidate();
         mainPanel.add(scrollPane, BorderLayout.EAST);
     }
 
@@ -116,6 +131,10 @@ public class BarcodeLookupComponent {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setInfoLabel() {
+        textLabel.setText(products.get(productIndex).toString());
     }
 }
 

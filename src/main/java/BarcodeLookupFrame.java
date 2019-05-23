@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 
 public class BarcodeLookupFrame extends JFrame {
 
-    private final int width = 1200;
+    private final int width = 1500;
     private final int height = 800;
 
     public BarcodeLookupFrame() {
