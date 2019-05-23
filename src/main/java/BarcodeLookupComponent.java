@@ -5,13 +5,12 @@ import java.net.URL;
 
 public class BarcodeLookupComponent {
 
-    private JPanel mainPanel = new JPanel(new BorderLayout());
-    private JLabel textLabel = new JLabel();
+    private JPanel mainPanel = new JPanel(new BorderLayout(50, 50));
+    private JTextArea textArea = new JTextArea();
     private JLabel imageLabel = new JLabel();
     private JPanel imagePanel = new JPanel(new BorderLayout());
     private JLabel imageNumber = new JLabel("No Image");
     private JPanel searchPanel = new JPanel(new FlowLayout());
-    private JPanel infoPanel = new JPanel(new FlowLayout());
     private JList productList = new JList();
     private Products products;
     private String[] urls;
@@ -28,7 +27,7 @@ public class BarcodeLookupComponent {
         products =  barcodeLookupObject.getProducts();
         setProductList();
         setImageLabel();
-        setInfoLabel();
+        setTextArea();
     }
 
     public JPanel getComponent() {
@@ -37,10 +36,9 @@ public class BarcodeLookupComponent {
 
     private void setupMainPanel() {
         setupSearchPanel();
-        setupTextLabel();
-        setupImagePanel();
         setupScrollPane();
-        mainPanel.add(infoPanel, BorderLayout.CENTER);
+        setupImagePanel();
+        setupTextArea();
     }
 
     private void setupSearchPanel() {
@@ -64,11 +62,19 @@ public class BarcodeLookupComponent {
         mainPanel.add(searchPanel, BorderLayout.NORTH);
     }
 
-    private void setupTextLabel() {
-        textLabel.setMinimumSize(new Dimension(300, 700));
-        textLabel.setPreferredSize(new Dimension(300, 700));
-        textLabel.setMaximumSize(new Dimension(300, 700));
-        infoPanel.add(textLabel);
+    private void setupTextArea() {
+        textArea.setMinimumSize(new Dimension(400, 700));
+        textArea.setPreferredSize(new Dimension(400, 700));
+        textArea.setMaximumSize(new Dimension(400, 700));
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setOpaque(false);
+        textArea.setEditable(false);
+        textArea.setFocusable(false);
+        textArea.setBackground(UIManager.getColor("Label.background"));
+        textArea.setFont(UIManager.getFont("Label.font"));
+        textArea.setBorder(UIManager.getBorder("Label.border"));
+        mainPanel.add(textArea, BorderLayout.EAST);
     }
 
     private void setupImagePanel() {
@@ -92,7 +98,7 @@ public class BarcodeLookupComponent {
         imageButtons.add(imageNumber);
         imageButtons.add(nextImage);
         imagePanel.add(imageButtons, BorderLayout.SOUTH);
-        infoPanel.add(imagePanel);
+        mainPanel.add(imagePanel, BorderLayout.CENTER);
     }
 
     private void setupScrollPane() {
@@ -104,13 +110,11 @@ public class BarcodeLookupComponent {
             productIndex = productList.getSelectedIndex();
             urls = products.get(productIndex).getImages();
             imageIndex = 0;
-            setInfoLabel();
+            setTextArea();
             setImageLabel();
             //TODO set photo and info etc
         });
-        //infoPanel.add(scrollPane);
-        //infoPanel.revalidate();
-        mainPanel.add(scrollPane, BorderLayout.EAST);
+        mainPanel.add(scrollPane, BorderLayout.WEST);
     }
 
     private void setProductList() {
@@ -133,8 +137,8 @@ public class BarcodeLookupComponent {
         }
     }
 
-    private void setInfoLabel() {
-        textLabel.setText(products.get(productIndex).toString());
+    private void setTextArea() {
+        textArea.setText(products.get(productIndex).toString());
     }
 }
 

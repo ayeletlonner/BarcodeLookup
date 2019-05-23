@@ -156,147 +156,146 @@ public class Product {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("<html>");
+        StringBuilder stringBuilder = new StringBuilder();
         if (product_name != null && !product_name.isEmpty()) {
             stringBuilder.append("Product Name: " + product_name);
         }
         if (barcode_number != null && !barcode_number.isEmpty()) {
-            stringBuilder.append("<br/>Barcode Number: " + barcode_number);
+            stringBuilder.append("\nBarcode Number: " + barcode_number);
         }
 
         if (barcode_type != null && !barcode_type.isEmpty()) {
-            stringBuilder.append("<br/>Barcode Type: " + barcode_type);
+            stringBuilder.append("\nBarcode Type: " + barcode_type);
         }
 
         if (barcode_formats != null && !barcode_formats.isEmpty()) {
-            stringBuilder.append("<br/>Barcode Formats: " + barcode_formats);
+            stringBuilder.append("\nBarcode Formats: " + barcode_formats);
         }
 
         if (mpn != null && !mpn.isEmpty()) {
-            stringBuilder.append( "<br/>MPN: " + mpn);
+            stringBuilder.append( "\nMPN: " + mpn);
         }
 
         if (model != null && !model.isEmpty()) {
-            stringBuilder.append("<br/>Model: " + model);
+            stringBuilder.append("\nModel: " + model);
         }
 
         if (asin != null && !asin.isEmpty()) {
-            stringBuilder.append("<br/>Amazon Standard Identification Number: " + asin);
+            stringBuilder.append("\nAmazon Standard Identification Number: " + asin);
         }
 
         if (title != null && !title.isEmpty()) {
-            stringBuilder.append("<br/>Title: " + title);
+            stringBuilder.append("\nTitle: " + title);
         }
 
         if (category != null && !category.isEmpty()) {
-            stringBuilder.append("<br/>Category: " + category);
+            stringBuilder.append("\nCategory: " + category);
         }
 
         if (manufacturer != null && !manufacturer.isEmpty()) {
-            stringBuilder.append("<br/>Manufacturer: " + manufacturer);
+            stringBuilder.append("\nManufacturer: " + manufacturer);
         }
 
         if (brand != null && !brand.isEmpty()) {
-            stringBuilder.append("<br/>Brand: " + brand);
+            stringBuilder.append("\nBrand: " + brand);
         }
 
         if (label != null && !label.isEmpty()) {
-            stringBuilder.append("<br/>Label: " + label);
+            stringBuilder.append("\nLabel: " + label);
         }
 
         if (author != null && !author.isEmpty()) {
-            stringBuilder.append("<br/>Author: " + author);
+            stringBuilder.append("\nAuthor: " + author);
         }
 
         if (publisher != null && !publisher.isEmpty()) {
-            stringBuilder.append("<br/>Publisher: " + publisher);
+            stringBuilder.append("\nPublisher: " + publisher);
         }
 
         if (artist != null && !artist.isEmpty()) {
-            stringBuilder.append("<br/>Artist: " + artist);
+            stringBuilder.append("\nArtist: " + artist);
         }
 
         if (actor != null && !actor.isEmpty()) {
-            stringBuilder.append("<br/>Actor: " + actor);
+            stringBuilder.append("\nActor: " + actor);
         }
 
         if (director != null && !director.isEmpty()) {
-            stringBuilder.append("<br/>Director: " + director);
+            stringBuilder.append("\nDirector: " + director);
         }
 
         if (studio != null && !studio.isEmpty()) {
-            stringBuilder.append("<br/>Studio: " + studio);
+            stringBuilder.append("\nStudio: " + studio);
         }
 
         if (genre != null && !genre.isEmpty()) {
-            stringBuilder.append("<br/>Genre: " + genre);
+            stringBuilder.append("\nGenre: " + genre);
         }
 
         if (audience_rating != null && !audience_rating.isEmpty()) {
-            stringBuilder.append("<br/>Audience Rating: " + audience_rating);
+            stringBuilder.append("\nAudience Rating: " + audience_rating);
         }
 
         if (ingredients != null && !ingredients.isEmpty()) {
-            stringBuilder.append("<br/>Ingredients: " + ingredients);
+            stringBuilder.append("\nIngredients: " + ingredients);
         }
 
         if (nutrition_facts != null && !nutrition_facts.isEmpty()) {
-            stringBuilder.append("<br/>Nutrition Facts: " + nutrition_facts);
+            stringBuilder.append("\nNutrition Facts: " + nutrition_facts);
         }
 
         if (color != null && !color.isEmpty()) {
-            stringBuilder.append("<br/>Color: " + color);
+            stringBuilder.append("\nColor: " + color);
         }
 
         if (format != null && !format.isEmpty()) {
-            stringBuilder.append("<br/>Format: " + format);
+            stringBuilder.append("\nFormat: " + format);
         }
 
         if (package_quantity != "") {
-            stringBuilder.append("<br/>Package Quantity: " + package_quantity);
+            stringBuilder.append("\nPackage Quantity: " + package_quantity);
         }
 
         if (size != null && !size.isEmpty()) {
-            stringBuilder.append("<br/>Size: " + size);
+            stringBuilder.append("\nSize: " + size);
         }
 
         if (length != null && !length.isEmpty()) {
-            stringBuilder.append("<br/>Length: " + length);
+            stringBuilder.append("\nLength: " + length);
         }
 
         if (width != null && !width.isEmpty()) {
-            stringBuilder.append("<br/>Width: " + width);
+            stringBuilder.append("\nWidth: " + width);
         }
 
         if (height != null && !height.isEmpty()) {
-            stringBuilder.append("<br/>Height: " + height);
+            stringBuilder.append("\nHeight: " + height);
         }
 
         if (weight != null && !weight.isEmpty()) {
-            stringBuilder.append("<br/>Weight: " + weight);
+            stringBuilder.append("\nWeight: " + weight);
         }
 
         if (release_date != null && !release_date.isEmpty()) {
-            stringBuilder.append("<br/>Release Date: " + release_date);
+            stringBuilder.append("\nRelease Date: " + release_date);
         }
 
         if (description != null && !description.isEmpty()) {
-            stringBuilder.append("<br/>Description: " + description);
+            stringBuilder.append("\n\nDescription: " + description);
         }
 
         if (features.length > 0) {
-            stringBuilder.append("<br/>Features: " + Arrays.toString(features));
+            stringBuilder.append("\n\nFeatures: " + Arrays.toString(features));
         }
 
-        if (stores != null) {
-            stringBuilder.append("<br/>Stores: " + stores);
+        if (stores.size() > 0) {
+            stringBuilder.append("\n\nStores: " + stores);
         }
 
         if (reviews.length > 0) {
-            stringBuilder.append("<br/>Reviews: " + Arrays.toString(reviews));
+            stringBuilder.append("\n\nReviews: " + Arrays.toString(reviews));
         }
 
-        stringBuilder.append("<html");
         return stringBuilder.toString();
     }
 }
