@@ -25,7 +25,7 @@ public class BarcodeLookupFrame extends JFrame {
         Disposable disposable = client.getProducts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.trampoline())
-                .subscribe(component::setProducts);
+                .subscribe(component::setProducts, Throwable::printStackTrace);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 disposable.dispose();

@@ -1,18 +1,16 @@
-import java.util.Arrays;
-
 public class Product {
 
-    private int barcode_number;
+    private String barcode_number;
     private String barcode_type, barcode_formats, mpn, model, asin, product_name, title, category,
             manufacturer, brand, label, author, publisher, artist, actor, director, studio, genre, audience_rating,
             ingredients, nutrition_facts, color, format, package_quantity, size, length, width, height, weight,
             release_date, description;
     private String[] features;
     private String[] images;
-    private String[] stores;
+    private Stores stores;
     private String[] reviews;
 
-    public int getBarcode() {
+    public String getBarcode() {
         return barcode_number;
     }
 
@@ -148,7 +146,7 @@ public class Product {
         return images;
     }
 
-    public String[] getStores() {
+    public Stores getStores() {
         return stores;
     }
 
@@ -159,7 +157,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "barcode_number=" + barcode_number +
+                "barcode_number='" + barcode_number + '\'' +
                 ", barcode_type='" + barcode_type + '\'' +
                 ", barcode_formats='" + barcode_formats + '\'' +
                 ", mpn='" + mpn + '\'' +
@@ -191,10 +189,6 @@ public class Product {
                 ", weight='" + weight + '\'' +
                 ", release_date='" + release_date + '\'' +
                 ", description='" + description + '\'' +
-                ", features=" + Arrays.toString(features) +
-                ", images=" + Arrays.toString(images) +
-                ", stores=" + Arrays.toString(stores) +
-                ", reviews=" + Arrays.toString(reviews) +
                 '}';
     }
 }
