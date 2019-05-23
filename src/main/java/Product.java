@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Product {
 
     private String barcode_number;
@@ -189,6 +191,10 @@ public class Product {
                 ", weight='" + weight + '\'' +
                 ", release_date='" + release_date + '\'' +
                 ", description='" + description + '\'' +
+                ", features=" + Arrays.toString(features) +
+                ", images=" + Arrays.toString(images) +
+                ", stores=" + stores +
+                ", reviews=" + Arrays.toString(reviews) +
                 '}';
     }
 }
