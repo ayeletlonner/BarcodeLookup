@@ -6,8 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BarcodeLookupClient {
 
     private final BarcodeLookupAPI api;
-    private String productName;
-    private String barcode;
 
     public BarcodeLookupClient() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -18,19 +16,11 @@ public class BarcodeLookupClient {
         api = retrofit.create(BarcodeLookupAPI.class);
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public Observable<BarcodeLookupObject> searchByProductName() {
+    public Observable<BarcodeLookupObject> searchByProductName(String productName) {
         return api.searchByProductName(productName);
     }
 
-    public Observable<BarcodeLookupObject> searchByBarcode() {
+    public Observable<BarcodeLookupObject> searchByBarcode(String barcode) {
         return api.searchByBarcode(barcode);
     }
 }

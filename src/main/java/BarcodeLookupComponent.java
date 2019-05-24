@@ -28,6 +28,11 @@ public class BarcodeLookupComponent  extends JFrame{
         this.client = client;
         productIndex = 0;
         imageIndex = 0;
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent event) {
+                disposable.dispose();
+            }
+        });
         setupMainPanel();
     }
 
@@ -107,8 +112,8 @@ public class BarcodeLookupComponent  extends JFrame{
         JScrollPane scrollPane = new JScrollPane(productList);
         productList.addListSelectionListener(e -> {
             productIndex = productList.getSelectedIndex();
-            setURLs();
             imageIndex = 0;
+            setURLs();
             setTextArea();
             setImageLabel();
         });
@@ -142,7 +147,10 @@ public class BarcodeLookupComponent  extends JFrame{
     }
 
     private void setURLs() {
-        if (products != null && products.get(productIndex).getImages().length > 0) {
+        if (products != null && products.size() > 0
+                && products.get(productIndex).getImages() != null
+                && products.get(productIndex).getImages().length > 0)
+        {
             urls = products.get(productIndex).getImages();
         }
         else {
@@ -159,7 +167,7 @@ public class BarcodeLookupComponent  extends JFrame{
 
     private void setBlankImageLabel() {
         imageLabel.setIcon(null);
-        imageLabel.setText("No products found");
+        imageLabel.setText("No image found");
         imageNumber.setText("No Image");
     }
 
@@ -168,29 +176,17 @@ public class BarcodeLookupComponent  extends JFrame{
     }
 
     private void barcodeButtonClicked() {
-        client.setBarcode(textField.getText());
-        disposable = client.searchByBarcode()
+        disposable = client.searchByBarcode(textField.getText())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(this::setProducts, Throwable::printStackTrace);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                disposable.dispose();
-            }
-        });
     }
 
     private void productNameButtonClicked() {
-        client.setProductName(textField.getText());
-        disposable = client.searchByProductName()
+        disposable = client.searchByProductName(textField.getText())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(this::setProducts, Throwable::printStackTrace);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                disposable.dispose();
-            }
-        });
     }
 }
 
