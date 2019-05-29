@@ -1,10 +1,14 @@
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 public class BarcodeLookupComponent  extends JFrame{
@@ -18,11 +22,14 @@ public class BarcodeLookupComponent  extends JFrame{
     private JPanel searchPanel = new JPanel(new FlowLayout());
     private JTextField textField = new JTextField();
     private JList productList = new JList();
+    private JPanel textPanel = new JPanel(new BorderLayout());
     private Products products;
     private String[] urls;
     private int productIndex;
     private int imageIndex;
     private Disposable disposable;
+    private DefaultTableModel model;
+    private JTable storeTable;
 
     public BarcodeLookupComponent(BarcodeLookupClient client) {
         this.client = client;
@@ -51,7 +58,8 @@ public class BarcodeLookupComponent  extends JFrame{
         setupSearchPanel();
         setupScrollPane();
         setupImagePanel();
-        setupTextArea();
+        setupTextAndStoreArea();
+        setupStoresTable();
     }
 
     private void setupSearchPanel() {
@@ -66,7 +74,7 @@ public class BarcodeLookupComponent  extends JFrame{
         mainPanel.add(searchPanel, BorderLayout.NORTH);
     }
 
-    private void setupTextArea() {
+    private void setupTextAndStoreArea() {
         textArea.setMinimumSize(new Dimension(400, 700));
         textArea.setPreferredSize(new Dimension(400, 700));
         textArea.setMaximumSize(new Dimension(400, 700));
@@ -78,7 +86,8 @@ public class BarcodeLookupComponent  extends JFrame{
         textArea.setBackground(UIManager.getColor("Label.background"));
         textArea.setFont(UIManager.getFont("Label.font"));
         textArea.setBorder(UIManager.getBorder("Label.border"));
-        mainPanel.add(textArea, BorderLayout.EAST);
+        textPanel.add(textArea, BorderLayout.NORTH);
+        mainPanel.add(textPanel, BorderLayout.EAST);
     }
 
     private void setupImagePanel() {
@@ -116,6 +125,7 @@ public class BarcodeLookupComponent  extends JFrame{
             setURLs();
             setTextArea();
             setImageLabel();
+            setStores();
         });
         mainPanel.add(scrollPane, BorderLayout.WEST);
     }
@@ -173,6 +183,49 @@ public class BarcodeLookupComponent  extends JFrame{
 
     private void setTextArea() {
         textArea.setText(products.get(productIndex).toString());
+    }
+
+    private void setupStoresTable() {
+
+        String[] columns = new String[]{"Store Name", "Price", "URL"};
+        model = new DefaultTableModel(new String[0][3], columns);
+        storeTable = new JTable(model);
+        storeTable.setFocusable(true);
+        storeTable.setRowSelectionAllowed(true);
+        storeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        textPanel.add(storeTable, BorderLayout.SOUTH);
+
+        storeTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table =(JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                int col = table.columnAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1 && col == 2) {
+                    try {
+                        String str = table.getValueAt(row, col).toString();
+                        Desktop.getDesktop().browse(new URI(str));
+
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void setStores() {
+        model.setRowCount(0);
+        Stores stores = products.get(productIndex).getStores();
+
+        if (stores != null && stores.size() > 0) {
+            model.setRowCount(stores.size());
+            for (int i = 0; i < stores.size(); i++) {
+                Store store = stores.get(i);
+                model.addRow(new String[] {store.getStore_name(), store.getStore_price(), store.getProduct_url()} );
+            }
+        }
+        model.fireTableDataChanged();
     }
 
     private void barcodeButtonClicked() {

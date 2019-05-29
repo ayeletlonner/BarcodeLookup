@@ -4,9 +4,9 @@ import retrofit2.http.Query;
 
 public interface BarcodeLookupAPI {
 
-    @GET("/v2/products?key=35r1sqc7freen47yw62q11ww4kly1f&")
+    @GET("/v2/products?key=r0jpjqlmeyg1ka1vlkmahj0r4sahzp&")
     Observable<BarcodeLookupObject> searchByProductName(@Query("product-name") String product_name);
 
-    @GET("/v2/products?key=35r1sqc7freen47yw62q11ww4kly1f&")
+    @GET("/v2/products?key=r0jpjqlmeyg1ka1vlkmahj0r4sahzp&")
     Observable<BarcodeLookupObject> searchByBarcode(@Query("barcode") String barcode);
 }

@@ -288,9 +288,9 @@ public class Product {
             stringBuilder.append("\n\nFeatures: " + Arrays.toString(features));
         }
 
-        if (stores.size() > 0) {
+        /*if (stores.size() > 0) {
             stringBuilder.append("\n\nStores: " + stores);
-        }
+        }*/
 
         if (reviews.length > 0) {
             stringBuilder.append("\n\nReviews: " + Arrays.toString(reviews));
